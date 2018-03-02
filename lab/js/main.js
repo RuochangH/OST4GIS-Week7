@@ -125,11 +125,13 @@ of the application to report this information.
 
 ===================== */
 
-var dataset = ""
+
+var dataset = "https://raw.githubusercontent.com/CPLN-692-401/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson";
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  var colors = {MON: "#F8B195",TUE:"#F67280",WED:"#C06C84",THU:"#6C5B7B",FRI:"#355C7D"};
+  return {fillColor:colors[feature.properties.COLLDAY],fillOpacity:0.8, weight:2, color: "#ccc"};
 };
 
 var showResults = function() {
@@ -145,21 +147,30 @@ var showResults = function() {
   $('#results').show();
 };
 
-
+var colldays=[];
 var eachFeatureFunction = function(layer) {
+  colldays.push(layer.feature.properties.COLLDAY);
   layer.on('click', function (event) {
     /* =====================
     The following code will run every time a layer on the map is clicked.
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
-    console.log(layer.feature);
+    console.log(layer.feature.properties.COLLDAY);
     showResults();
+    var day = function (val) {if(val=="MON") {return "Monday";} else if (
+      val=="TUE") {return "Tuesday";} else if (
+        val=="WED") {return "Wedsday";} else if (
+          val=="THU"){return "Thursday";} else if (
+            val=="FRI"){return "Friday";}};
+    var fulday = day(layer.feature.properties.COLLDAY);
+    $('.day-of-week').text(fulday);
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  if(feature.properties.COLLDAY != " "){
+  return true;}
 };
 
 $(document).ready(function() {
@@ -172,5 +183,6 @@ $(document).ready(function() {
 
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
+    console.log(_.unique(colldays));
   });
 });
