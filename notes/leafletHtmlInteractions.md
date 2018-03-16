@@ -8,13 +8,14 @@ First, we'll need some HTML:
 ```html
 <html>
   <div id="container"></div>
-</html
+</html>
 ```
 
 Next we'll create a `L.Featuregroup` (perhaps from some geojson), add
 an HTML element with jQuery, and register an event on that new HTML to
 change the properties of its corresponding layer.
 ```javascript
+
 var featureGroup;
 
 /** take one layer and register all behaviors + add HTML which corresponds to it */
